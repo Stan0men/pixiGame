@@ -6,8 +6,8 @@ let gravity = 2;//гравітація
 let figuresAmount = -1; //кількість створених фігур
 let figure = []; //массив, що зберігає наші фігури
 
-let createCanvas={
-    createCanvas: function() {
+let createCanvas = {
+    createCanvas: function () {
         app = new PIXI.Application(width, height); //створюємо канвас
         document.body.appendChild(app.view); //виводимо його
     },
@@ -16,12 +16,12 @@ let createCanvas={
 
 let model = {
 
-   drawCircle: function() {
+    drawCircle: function () {
         let rand = Math.floor(Math.random() * colors.length); //генеруємо рандомне число в проміжку від 0 до к-ті кольорів в массиві
         let radius = 50; //радіус
         let inAreaX = width - 100; // можливі координати по осі Х
         let circleY = -50; //фігура повинна створюватись замежами канваса
-        let circleX = Math.floor(Math.random()* inAreaX); //створюємо фігуру в рандомному місці по осі Х
+        let circleX = Math.floor(Math.random() * inAreaX); //створюємо фігуру в рандомному місці по осі Х
         let circle = new PIXI.Graphics(); //створюємо новий графічний елемент
         circle.lineStyle(0); //починаємо малювати
         circle.beginFill(colors[rand], 1); //випадковий колір
@@ -36,16 +36,16 @@ let model = {
         app.stage.addChild(circle); //виводимо фігуру в канвасі
 
     },
-    drawEllipse: function() {
+    drawEllipse: function () {
         let rand = Math.floor(Math.random() * colors.length);
-        let ellipseWidth=75;
-        let ellipseHeight=50;
-        let inAreaX =  width-100;
+        let ellipseWidth = 75;
+        let ellipseHeight = 50;
+        let inAreaX = width - 100;
         let ellipseY = -250;
-        let ellipseX = Math.floor(Math.random()* inAreaX);
+        let ellipseX = Math.floor(Math.random() * inAreaX);
         let ellipse = new PIXI.Graphics();
         ellipse.beginFill(colors[rand], 1);
-        ellipse.drawEllipse(ellipseX, ellipseY,ellipseWidth,ellipseHeight);
+        ellipse.drawEllipse(ellipseX, ellipseY, ellipseWidth, ellipseHeight);
         ellipse.endFill();
         ellipse.interactive = true;
         app.stage.addChild(ellipse);
@@ -56,28 +56,27 @@ let model = {
         app.stage.addChild(ellipse);
 
     },
- drawRect:function () {
+    drawRect: function () {
 
-     let rand = Math.floor(Math.random() * colors.length);
+        let rand = Math.floor(Math.random() * colors.length);
+        let rectWidth = 100;
+        let rectHeight = 100;
+        let inAreaX = width - 100;
+        let rectY = -50;
+        let rectX = Math.floor(Math.random() * inAreaX);
+        let rect = new PIXI.Graphics();
+        rect.beginFill(colors[rand], 1);
+        rect.drawRect(rectX, rectY, rectWidth, rectHeight);
+        rect.endFill();
+        rect.interactive = true;
+        app.stage.addChild(rect);
+        rect.on('pointerdown', controller.clearFigure);
+        rect.buttonMode = true;
+        figuresAmount++;
+        figure.push(rect);
+        app.stage.addChild(rect);
 
-     let rectWidth=100;
-     let rectHeight=100;
-     let inAreaX = width - 100;
-     let rectY = -50;
-     let rectX = Math.floor(Math.random()* inAreaX);
-     let rect = new PIXI.Graphics();
-     rect.beginFill(colors[rand], 1);
-     rect.drawRect(rectX, rectY, rectWidth,rectHeight);
-     rect.endFill();
-     rect.interactive = true;
-     app.stage.addChild(rect);
-     rect.on('pointerdown', controller.clearFigure);
-     rect.buttonMode = true;
-     figuresAmount++;
-     figure.push(rect);
-     app.stage.addChild(rect);
-
-}
+    }
 
 };
 
@@ -86,29 +85,29 @@ let model = {
 }*/
 
 let view = {
-loadGame: function(){
-    createCanvas.createCanvas();
-    model.drawCircle();//малюємо фігуру поки 1 раз
-    model.drawEllipse();
-    model.drawRect();
-    setInterval(model.drawRect(), 1000); //малюємо фігуру кожну секунду
-    setInterval(model.drawCircle, 1000);
-    setInterval(model.drawEllipse, 1000);
-    app.ticker.add(function() { //постійне обновлення канваса
-        for (let i = 0; i < figuresAmount; i++) {
-            figure[i].position.y += gravity; //примушуємо гравітацію працювати
-        }
-    });
+    loadGame: function () {
+        createCanvas.createCanvas();
+        model.drawCircle();//малюємо фігуру поки 1 раз
+        model.drawEllipse();
+        model.drawRect();
+        setInterval(model.drawRect(), 1000); //малюємо фігуру кожну секунду
+        setInterval(model.drawCircle, 1000);
+        setInterval(model.drawEllipse, 1000);
+        app.ticker.add(function () { //постійне обновлення канваса
+            for (let i = 0; i < figuresAmount; i++) {
+                figure[i].position.y += gravity; //примушуємо гравітацію працювати
+            }
+        });
 
-} //закриваємо функцію loadGame();
+    } //закриваємо функцію loadGame();
 
 
 };
 let controller = {
-clearFigure: function(){
-    this.clear(); //видаляємо фігуру по якій клікнули
-}
+    clearFigure: function () {
+        this.clear(); //видаляємо фігуру по якій клікнули
+    }
 };
 
 
-view.loadGame(); //запускаем игру
+view.loadGame(); //запускаємо гру
